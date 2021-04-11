@@ -6,22 +6,42 @@
     <link rel="stylesheet" href="styles/bootstrap.min.css">
     <style>
       .message { font-size: 1.3em; font-weight: bold; }
+
+      .message .green {
+      	color: green;
+      }
+
+	  .message .red {
+      	color: red;
+      }
+
+      input.green {
+      	border: 1px solid green;
+      }
+
+      input.red {
+      	border: 1px solid red;
+      }
     </style>
+     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+    <script type="text/javascript" src="./app.js"></script>
   </head>
-<body>
-   <div class="container">
-     <h1>Lunch Checker</h1>
+<body ng-app="LunchCheck">
+   <div class="container" ng-controller="LunchCheckController">
+     <h1>Lunch Checker (use comma)</h1>
 
          <div class="form-group">
              <input id="lunch-menu" type="text"
              placeholder="list comma separated dishes you usually have for lunch"
-             class="form-control">
+             class="form-control"
+             ng-model="lunchMenu"
+             ng-class="{green:'green', red:'red'}[class_name]">
          </div>
          <div class="form-group">
-             <button class="btn btn-default">Check If Too Much</button>
+             <button class="btn btn-default" ng-click="checkRules()">Check If Too Much</button>
          </div>
          <div class="form-group message">
-           <!-- Your message can go here. -->
+           <span ng-class="{green:'green', red:'red'}[class_name]">{{resultText}}</span>
          </div>
    </div>
 
