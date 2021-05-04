@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Shopping List Check Off</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles/bootstrap.min.css">
+    <style>
+      .emptyMessage {
+        font-weight: bold;
+        color: red;
+        font-size: 1.2em;
+      }
+      li {
+        margin-bottom: 7px;
+        font-size: 1.2em;
+      }
+      li > button {
+        margin-left: 6px;
+      }
+      button > span {
+        color: green;
+      }
+    </style>
+     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+    <script type="text/javascript" src="./app.js"></script>
+  </head>
+<body ng-app="ShoppingListCheckOff">
+  <div class="container">
+  <h1>Shopping List Check Off</h1>
+
+  <div class="row">
+
+    <!-- To Buy List -->
+    <div class="col-md-6" ng-controller="ToBuyController">
+     <h2>To Buy:</h2>
+     <ul>
+       <li ng-repeat="product in getShopList()">Buy {{product.quantity}} {{product.name}} 
+       	<button class="btn btn-default" ng-click="Buy(product.name)"><span class="glyphicon glyphicon-ok"></span> Bought</button></li>
+     </ul>
+     <div class="emptyMessage" ng-show="checkStatus()">Everything is bought!</div>
+    </div>
+
+    <!-- Already Bought List -->
+    <div class="col-md-6" ng-controller="AlreadyBoughtController">
+     <h2>Already Bought:</h2>
+     <ul>
+       <li ng-repeat="product in getShopList()">Bought {{product.quantity}} {{product.name}}</li>
+     </ul>
+     <div class="emptyMessage" ng-show="checkStatus()">Nothing bought yet.</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
