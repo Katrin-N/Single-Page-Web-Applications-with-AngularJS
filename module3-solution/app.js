@@ -28,6 +28,7 @@
       if(search.searchTerm) {
         var promise = MenuSearchService.getMatchedMenuItems(search.searchTerm);
         promise.then(function(response) {
+            console.log(search.found);
           search.found = response;
           search.nothing = false;
         })
