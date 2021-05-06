@@ -23,7 +23,7 @@
     <!-- found-items should be implemented as a component -->
 
     <found-items items="narrow.found" on-remove="narrow.removeItem(index)" ng-show="narrow.found.length != 0"></found-items>
-    <div class="alert alert-danger row col-md-12 mx-auto" ng-show="narrow.found.length == 0">
+    <div class="alert alert-danger row col-md-12 mx-auto" ng-show="narrow.found.length == 0 && !narrow.startInit">
       <strong>Nothing found</strong>
     </div>
   </div>
