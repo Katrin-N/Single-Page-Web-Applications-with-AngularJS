@@ -1,0 +1,21 @@
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Short Name</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th class="nosort"></th>
+    </tr>
+  </thead>
+  <tbody ng-repeat="item in items">
+    <tr>
+      <td>{{item.short_name}}</td>
+      <td>{{item.name}}</td>
+      <td>{{item.description}}</td>
+      <td>
+        <button ng-click="onRemove({index: $index})" class="btn btn-warning btn-small">Don't want this one!</button>
+      </td>
+    </tr>
+  </tbody>
+</table>

@@ -1,50 +1,66 @@
-var app = angular.module('NarrowItDownApp', [ ]);
+(function () {
+  'use strict';
+  angular.module('NarrowItDownApp', [])
+  .controller('NarrowItDownController', NarrowItDownController)
+  .service('MenuSearchService', MenuSearchService)
+  .directive('foundItems', foundItems);
 
-app.factory('MenuSearchService', ['$rootScope', '$http', function ($rootScope, $http){
+  function foundItems() {
+    var ddo = {
+      restrict: 'E',
+      templateUrl: 'foundItem.html',
+      scope: {
+        items: '<',
+        onRemove: '&'
+      },
+      controller: NarrowItDownController,
+      controllerAs: 'menu',
+      bindToController: true
+    };
+    return ddo;
+  }
 
-    return {
-        getMatchedMenuItems: function (searchTerm) {
-          
-            return $http({method: 'GET', url: 'https://davids-restaurant.herokuapp.com/menu_items.json'}).
-                then(function (result) {
-                
-                var foundItems = result.data.menu_items.filter(x => x.description.indexOf(searchTerm) > -1);
+  NarrowItDownController.$inject = ['MenuSearchService'];
+  function NarrowItDownController(MenuSearchService) {
+    var search = this;
+    search.found = [];
+    search.nothing = false;
 
-                 console.log(foundItems);
-                return foundItems;
-            });
-        }
-  };
-}])
-
-app.controller('NarrowItDownController', 
-    function NarrowItDownController($scope, MenuSearchService){
-         $scope.searchTerm = "";
-         $scope.foundItems = [];
-         $scope.name = "ffff";
-
-         $scope.searchItems = function() {
-             $scope.foundItems = [];
-             $scope.foundItems = MenuSearchService.getMatchedMenuItems($scope.searchTerm);
-        };
-    }
-)
-
-
-app.directive("foundItems", function($timeout) {
-    return {
-      restrict: 'EAC',
-      template: `<div>Directive Counter: {{internalCount}}</div>`,
-      link: function($scope, element) {
-        $scope.internalCount = 0;
-        function addCount() {
-          $timeout(function() {
-            $scope.internalCount += 1;
-            addCount();
-          }, 1000)
-        }
-        addCount();
+    search.getMatchedMenuItems = function() {
+      search.found = [];
+      if(search.searchTerm) {
+        var promise = MenuSearchService.getMatchedMenuItems(search.searchTerm);
+        promise.then(function(response) {
+          search.found = response;
+          search.nothing = false;
+        })
+        .catch(function(err) {
+          console.error(err);
+          search.nothing = true;
+        });
+      } else {
+        search.nothing = true;
       }
     };
-  }
-);
+
+    search.removeItem = function (index) {
+      search.found.splice(index, 1);
+      if(search.found.length == 0) {
+        search.error = "Nothing found!"
+      }
+    };
+  };
+
+  MenuSearchService.$inject = ['$http'];
+  function MenuSearchService($http) {
+    var service = this;
+    service.getMatchedMenuItems = function(searchTerm) {
+      return $http({
+        method: 'GET',
+        url: ('https://davids-restaurant.herokuapp.com/menu_items.json')
+      }).then(function (result) {
+        return result.data.menu_items.filter(x => x.description.indexOf(searchTerm) > -1);
+      });
+    }
+  };
+})();
