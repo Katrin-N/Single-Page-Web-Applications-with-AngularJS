@@ -21,27 +21,23 @@
   function NarrowItDownController(MenuSearchService) {
     var search = this;
     search.found = [];
+    search.isLoading = false;
     search.nothing = false;
-
     search.getMatchedMenuItems = function() {
       search.found = [];
       if(search.searchTerm) {
+        search.isLoading = true;
         var promise = MenuSearchService.getMatchedMenuItems(search.searchTerm);
         promise.then(function(response) {
-            
           search.found = response;
           search.nothing = false;
-
-          if(search.found.length == 0) {
-            search.nothing = true;
-          }
-
-          console.log(search.found);
         })
         .catch(function(err) {
+          console.error(err);
           search.nothing = true;
         });
       } else {
+        search.isLoading = false;
         search.nothing = true;
       }
     };
@@ -49,7 +45,7 @@
     search.removeItem = function (index) {
       search.found.splice(index, 1);
       if(search.found.length == 0) {
-        search.nothing = true;
+        search.error = "Nothing found!"
       }
     };
   };
