@@ -19,32 +19,27 @@
 
   NarrowItDownController.$inject = ['MenuSearchService'];
   function NarrowItDownController(MenuSearchService) {
-    var search = this;
-    search.found = [];
-    search.nothing = false;
+    var service = this;
+    service.found = [];
+    service.nothing = false;
 
-    search.getMatchedMenuItems = function() {
-      search.found = [];
-      if(search.searchTerm) {
-        var promise = MenuSearchService.getMatchedMenuItems(search.searchTerm);
+    service.getMatchedMenuItems = function() {
+      service.found = [];
+      if(service.searchTerm) {
+        var promise = MenuSearchService.getMatchedMenuItems(service.searchTerm);
         promise.then(function(response) {
-            console.log(search.found);
-          search.found = response;
-          search.nothing = false;
-        })
-        .catch(function(err) {
-          console.error(err);
-          search.nothing = true;
+          service.found = response;
+          service.nothing = false;
         });
       } else {
-        search.nothing = true;
+        service.nothing = true;
       }
     };
 
-    search.removeItem = function (index) {
-      search.found.splice(index, 1);
-      if(search.found.length == 0) {
-        search.error = "Nothing found!"
+    service.removeItem = function (index) {
+      service.found.splice(index, 1);
+      if(service.found.length == 0) {
+         service.nothing = true;
       }
     };
   };
@@ -57,7 +52,6 @@
         method: 'GET',
         url: ('https://davids-restaurant.herokuapp.com/menu_items.json')
       }).then(function (result) {
-        console.log(result.data.menu_items.filter(x => x.description.indexOf(searchTerm) > -1));
         return result.data.menu_items.filter(x => x.description.indexOf(searchTerm) > -1);
       });
     }
