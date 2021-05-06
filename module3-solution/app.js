@@ -28,7 +28,6 @@
       if(search.searchTerm) {
         var promise = MenuSearchService.getMatchedMenuItems(search.searchTerm);
         promise.then(function(response) {
-            console.log(search.found);
           search.found = response;
           search.nothing = false;
         })
@@ -44,8 +43,7 @@
     search.removeItem = function (index) {
       search.found.splice(index, 1);
       if(search.found.length == 0) {
-        search.error = "Nothing found!";
-         search.nothing = true;
+        search.error = "Nothing found!"
       }
     };
   };
