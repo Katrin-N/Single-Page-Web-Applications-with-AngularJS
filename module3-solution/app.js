@@ -28,16 +28,17 @@
       if(search.searchTerm) {
         var promise = MenuSearchService.getMatchedMenuItems(search.searchTerm);
         promise.then(function(response) {
-            console.log(response);
+            
           search.found = response;
           search.nothing = false;
 
           if(search.found.length == 0) {
             search.nothing = true;
           }
+
+          console.log(search.found);
         })
         .catch(function(err) {
-          console.error(err);
           search.nothing = true;
         });
       } else {
@@ -61,7 +62,6 @@
         method: 'GET',
         url: ('https://davids-restaurant.herokuapp.com/menu_items.json')
       }).then(function (result) {
-        console.log(result.data.menu_items.filter(x => x.description.indexOf(searchTerm) > -1));
         return result.data.menu_items.filter(x => x.description.indexOf(searchTerm) > -1);
       });
     }
